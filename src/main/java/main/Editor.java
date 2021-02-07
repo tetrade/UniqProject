@@ -1,3 +1,5 @@
+package main;
+
 public class Editor {
 //    private String comLine;
     private boolean iF;
