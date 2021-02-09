@@ -19,6 +19,7 @@ package main;
 import com.beust.jcommander.Parameter;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -37,14 +38,14 @@ public class Editor {
     private File inputFile;
 
     public void editing() throws Exception {
-
-        StringBuilder builder = new StringBuilder();
+        ArrayList<StringBuffer> list = new ArrayList();
         Scanner in;
         if (inputFile == null) {
             in = new Scanner(System.in);
         } else {
             in = new Scanner(inputFile);
         }
+        int index = 0;
         String lineToWrite = "";
         int countOfLine = 1;
         while (in.hasNextLine()) {
@@ -59,13 +60,19 @@ public class Editor {
                     || (sF != 0 && line.substring(sF).equals(lineToWrite.substring(sF)))
                     || (sF != 0 && iF && line.substring(sF).equalsIgnoreCase(lineToWrite.substring(sF))))
             ) {
-                builder.append(line);
-                if (in.hasNextLine()) {
-                    builder.append("\n"); // требуется чтобы исключить последний лишний перенос на новую строку
-                }
-                lineToWrite  = line;
+                    list.add(new StringBuffer(line));
+                    if (cF && !lineToWrite.equals("")) {
+                        list.set(index, list.get(index).insert(0,countOfLine + " * "));
+                        index ++;
+                        countOfLine = 1;
+                    }
+                    lineToWrite  = line;
+                } else if (cF) {
+                countOfLine ++;
             }
         }
-        System.out.println(builder);
+        list.set(index, list.get(index).insert(0,countOfLine + " * "));
+
+        System.out.println(String.join("\n", list));
     }
 }

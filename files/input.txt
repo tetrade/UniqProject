@@ -1,5 +1,4 @@
-abc
-abc
-ABC
-qqw
-qwer
+qwAbc
+qeabc
+55ABC
+123
