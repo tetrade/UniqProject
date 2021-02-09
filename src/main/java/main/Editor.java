@@ -71,7 +71,7 @@ public class Editor {
                 countOfLine ++;
             }
         }
-        list.set(index, list.get(index).insert(0,countOfLine + " * "));
+        if (cF) {list.set(index, list.get(index).insert(0,countOfLine + " * "));}
 
         System.out.println(String.join("\n", list));
     }
