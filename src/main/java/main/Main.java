@@ -1,12 +1,18 @@
 package main;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import com.beust.jcommander.JCommander;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        String comLine = in.nextLine();
-        System.out.println(Arrays.toString(comLine.split("\\s-[ioucs]")));
+import java.io.File;
+import java.io.FileNotFoundException;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        Editor arguments = new Editor();
+        JCommander.newBuilder().
+                addObject(arguments)
+                .build()
+                .parse(args);
+        arguments.editing();
     }
 }
+
