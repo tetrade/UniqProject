@@ -22,3 +22,10 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'main.Main'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
