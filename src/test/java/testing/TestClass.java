@@ -89,7 +89,8 @@ public class TestClass {
 
         edit.editing();
         assertEquals(
-                String.join("\n",Files.readAllLines(Path.of("files/output.txt"), StandardCharsets.UTF_8)), "url\nhttp\nIEEE"
+                String.join("\n",Files.readAllLines(Path.of("files/output.txt"), StandardCharsets.UTF_8)),
+                "url\nhttp\nIEEE"
         );
     }
 
@@ -102,9 +103,7 @@ public class TestClass {
                 .build()
                 .parse(args);
 
-        assertThrows(MinStringException.class, () -> {
-            edit.editing();
-        });
+        assertThrows(MinStringException.class, edit::editing);
 
     }
 }
