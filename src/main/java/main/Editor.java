@@ -41,7 +41,7 @@ public class Editor {
         return ans;
     }
 
-    public void editing() throws Exception {
+    public void editing() throws MinStringException, IOException {
         Scanner in;
         if (inputFile == null) {
             in = new Scanner(System.in);
@@ -55,7 +55,7 @@ public class Editor {
         while (in.hasNextLine()) {
             String line = in.nextLine();
             if (line.length() < sF) {
-                throw new Exception("");
+                throw new MinStringException("Еhe string length is less than -s flag");
             }
             if (!uF) {
                 if (

@@ -3,6 +3,7 @@ package testing;
 import com.beust.jcommander.JCommander;
 import com.sun.tools.javac.Main;
 import main.Editor;
+import main.MinStringException;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -105,7 +106,7 @@ public class TestClass {
                 .build()
                 .parse(args);
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(MinStringException.class, () -> {
             edit.editing();
         });
 
