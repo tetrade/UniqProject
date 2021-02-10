@@ -28,4 +28,6 @@ jar {
         attributes 'Main-Class': 'main.Main'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    baseName 'uniq'
+    version= ""
 }
