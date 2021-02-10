@@ -1,18 +1,14 @@
 package testing;
 
 import com.beust.jcommander.JCommander;
-import com.sun.tools.javac.Main;
 import main.Editor;
 import main.MinStringException;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 

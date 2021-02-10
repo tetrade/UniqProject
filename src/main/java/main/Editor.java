@@ -110,10 +110,10 @@ public class Editor {
             }
         }
         ans = String.join("\n", list);
-        out(ans);
+        writeOut(ans);
 
     }
-    private void out(String inf) throws IOException {
+    private void writeOut(String inf) throws IOException {
         if (outputFile != null) {
             FileWriter writer = new FileWriter(outputFile);
             writer.write(inf);
