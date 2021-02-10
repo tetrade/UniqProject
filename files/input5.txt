@@ -1,0 +1,11 @@
+ABCDE
+ABCDE
+abcde
+qwcde
+url
+dhcp
+DhCp
+http
+Tcp
+TCP
+IEEE

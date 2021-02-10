@@ -51,7 +51,7 @@ public class Editor {
         int index = 0;
         String lineToWrite = "";
         int countOfLine = 1;
-        HashMap<String, Integer> map = new HashMap();
+        LinkedHashMap<String, Integer> map = new LinkedHashMap();
         while (in.hasNextLine()) {
             String line = in.nextLine();
             if (line.length() < sF) {
@@ -67,16 +67,13 @@ public class Editor {
                 ) {
                     list.add(new StringBuffer(line));
                     if (cF && !lineToWrite.equals("")) {
-                        list.set(index, list.get(index).insert(0, countOfLine + " * "));
+                        list.set(index, list.get(index).insert(0, countOfLine + " "));
                         index++;
                         countOfLine = 1;
                     }
                     lineToWrite = line;
                 } else if (cF) {
                     countOfLine++;
-                }
-                if (cF) {
-                    list.set(index, list.get(index).insert(0, countOfLine + " * "));
                 }
             } else {
                 boolean checkUniq = true;
@@ -97,6 +94,9 @@ public class Editor {
                 }
 
             }
+        }
+        if (cF && !uF) {
+            list.set(index, list.get(index).insert(0, countOfLine + " "));
         }
         if (uF) {
             for (String key : map.keySet()) {
