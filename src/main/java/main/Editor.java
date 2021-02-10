@@ -19,9 +19,7 @@ package main;
 import com.beust.jcommander.Parameter;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class Editor {
     @Parameter(names = "-i")
@@ -36,9 +34,14 @@ public class Editor {
     private File outputFile;
     @Parameter(converter = FileConverter.class, validateWith = CheckExist.class)
     private File inputFile;
+    private ArrayList<StringBuffer> list = new ArrayList();
+    private String ans;
+
+    public String getAns() {
+        return ans;
+    }
 
     public void editing() throws Exception {
-        ArrayList<StringBuffer> list = new ArrayList();
         Scanner in;
         if (inputFile == null) {
             in = new Scanner(System.in);
@@ -48,31 +51,64 @@ public class Editor {
         int index = 0;
         String lineToWrite = "";
         int countOfLine = 1;
+        HashMap<String, Integer> map = new HashMap();
         while (in.hasNextLine()) {
             String line = in.nextLine();
-            if ( line.length() < sF) {
+            if (line.length() < sF) {
                 throw new Exception("");
             }
-            if (
-                    lineToWrite.equals("") ||
-                    !(line.equals(lineToWrite)
-                    || (iF && line.equalsIgnoreCase(lineToWrite))
-                    || (sF != 0 && line.substring(sF).equals(lineToWrite.substring(sF)))
-                    || (sF != 0 && iF && line.substring(sF).equalsIgnoreCase(lineToWrite.substring(sF))))
-            ) {
+            if (!uF) {
+                if (
+                        lineToWrite.equals("")
+                                || !(line.equals(lineToWrite)
+                                || (iF && line.equalsIgnoreCase(lineToWrite))
+                                || (sF != 0 && line.substring(sF).equals(lineToWrite.substring(sF)))
+                                || (sF != 0 && iF && line.substring(sF).equalsIgnoreCase(lineToWrite.substring(sF))))
+                ) {
                     list.add(new StringBuffer(line));
                     if (cF && !lineToWrite.equals("")) {
-                        list.set(index, list.get(index).insert(0,countOfLine + " * "));
-                        index ++;
+                        list.set(index, list.get(index).insert(0, countOfLine + " * "));
+                        index++;
                         countOfLine = 1;
                     }
-                    lineToWrite  = line;
+                    lineToWrite = line;
                 } else if (cF) {
-                countOfLine ++;
+                    countOfLine++;
+                }
+                if (cF) {
+                    list.set(index, list.get(index).insert(0, countOfLine + " * "));
+                }
+            } else {
+                boolean checkUniq = true;
+                for (String key : map.keySet()) {
+                    if (
+                            key.equals(line)
+                                    || (iF && line.equalsIgnoreCase(key))
+                                    || (sF != 0 && line.substring(sF).equals(key.substring(sF)))
+                                    || (sF != 0 && iF && line.substring(sF).equalsIgnoreCase(key.substring(sF)))
+                    ) {
+                        map.put(key, map.get(key) + 1);
+                        checkUniq = false;
+                        break;
+                    }
+                }
+                if (checkUniq) {
+                    map.put(line, map.getOrDefault(line, 1));
+                }
+
             }
         }
-        if (cF) {list.set(index, list.get(index).insert(0,countOfLine + " * "));}
-
-        System.out.println(String.join("\n", list));
+        if (uF) {
+            for (String key : map.keySet()) {
+                if (map.get(key) == 1) {
+                    if (cF) {
+                        list.add(new StringBuffer("1 " + key));
+                    } else {
+                        list.add(new StringBuffer(key));
+                    }
+                }
+            }
+        }
+       ans = String.join("\n", list);
     }
 }
