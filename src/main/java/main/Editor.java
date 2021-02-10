@@ -109,6 +109,17 @@ public class Editor {
                 }
             }
         }
-       ans = String.join("\n", list);
+        ans = String.join("\n", list);
+        out(ans);
+
+    }
+    public void out(String inf) throws IOException {
+        if (outputFile != null) {
+            FileWriter writer = new FileWriter(outputFile);
+            writer.write(inf);
+            writer.close();
+        } else {
+            System.out.println(inf);
+        }
     }
 }

@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 class Main {
     public static void main(String[] args) throws Exception {
-
-
         Editor arguments = new Editor();
         JCommander.newBuilder().
                 addObject(arguments)

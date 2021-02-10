@@ -5,8 +5,13 @@ import com.sun.tools.javac.Main;
 import main.Editor;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,6 +81,19 @@ public class TestClass {
         edit.editing();
         assertEquals("url\nhttp\nIEEE", edit.getAns());
     }
+    @Test
+    public void check6() throws Exception {
+        String[] args = {"-i", "-u", "-s", "2","-o", "files/output.txt", "files/input5.txt"};
+        Editor edit = new Editor();
+        JCommander.newBuilder().
+                addObject(edit)
+                .build()
+                .parse(args);
 
+        edit.editing();
+        assertEquals(
+                String.join("\n",Files.readAllLines(Path.of("files/output.txt"), StandardCharsets.UTF_8)), "url\nhttp\nIEEE"
+        );
+    }
 
 }
