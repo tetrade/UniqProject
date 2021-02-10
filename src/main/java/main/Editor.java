@@ -113,7 +113,7 @@ public class Editor {
         out(ans);
 
     }
-    public void out(String inf) throws IOException {
+    private void out(String inf) throws IOException {
         if (outputFile != null) {
             FileWriter writer = new FileWriter(outputFile);
             writer.write(inf);

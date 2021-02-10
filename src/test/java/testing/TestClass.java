@@ -96,4 +96,18 @@ public class TestClass {
         );
     }
 
+    @Test
+    public void check7() throws Exception {
+        String[] args = {"-i", "-u", "-s", "2","-o", "files/output.txt", "files/input6.txt"};
+        Editor edit = new Editor();
+        JCommander.newBuilder().
+                addObject(edit)
+                .build()
+                .parse(args);
+
+        assertThrows(Exception.class, () -> {
+            edit.editing();
+        });
+
+    }
 }
