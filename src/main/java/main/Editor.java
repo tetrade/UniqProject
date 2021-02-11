@@ -35,10 +35,9 @@ public class Editor {
     @Parameter(converter = FileConverter.class, validateWith = CheckExist.class)
     private File inputFile;
     private ArrayList<StringBuffer> list = new ArrayList();
-    private String ans;
 
     public String getAns() {
-        return ans;
+        return String.join("\n", list);
     }
 
     public void editing() throws MinStringException, IOException {
@@ -55,16 +54,10 @@ public class Editor {
         while (in.hasNextLine()) {
             String line = in.nextLine();
             if (line.length() < sF) {
-                throw new MinStringException("Еhe string length is less than -s flag");
+                throw new MinStringException("String length is less than -s flag");
             }
             if (!uF) {
-                if (
-                        lineToWrite.equals("")
-                                || !(line.equals(lineToWrite)
-                                || (iF && line.equalsIgnoreCase(lineToWrite))
-                                || (sF != 0 && line.substring(sF).equals(lineToWrite.substring(sF)))
-                                || (sF != 0 && iF && line.substring(sF).equalsIgnoreCase(lineToWrite.substring(sF))))
-                ) {
+                if (lineToWrite.equals("") || !checkForEq(lineToWrite, line)) {
                     list.add(new StringBuffer(line));
                     if (cF && !lineToWrite.equals("")) {
                         list.set(index, list.get(index).insert(0, countOfLine + " "));
@@ -78,12 +71,7 @@ public class Editor {
             } else {
                 boolean checkUniq = true;
                 for (String key : map.keySet()) {
-                    if (
-                            key.equals(line)
-                                    || (iF && line.equalsIgnoreCase(key))
-                                    || (sF != 0 && line.substring(sF).equals(key.substring(sF)))
-                                    || (sF != 0 && iF && line.substring(sF).equalsIgnoreCase(key.substring(sF)))
-                    ) {
+                    if (checkForEq(key, line)) {
                         map.put(key, map.get(key) + 1);
                         checkUniq = false;
                         break;
@@ -92,7 +80,6 @@ public class Editor {
                 if (checkUniq) {
                     map.put(line, map.getOrDefault(line, 1));
                 }
-
             }
         }
         if (cF && !uF) {
@@ -109,10 +96,9 @@ public class Editor {
                 }
             }
         }
-        ans = String.join("\n", list);
-        writeOut(ans);
-
+        writeOut(String.join("\n", list));
     }
+
     private void writeOut(String inf) throws IOException {
         if (outputFile != null) {
             FileWriter writer = new FileWriter(outputFile);
@@ -121,5 +107,12 @@ public class Editor {
         } else {
             System.out.println(inf);
         }
+    }
+
+    private boolean checkForEq(String line1, String line2) {
+        return line1.equals(line2)
+                || (iF && line1.equalsIgnoreCase(line2))
+                || (sF != 0 && line1.substring(sF).equals(line2.substring(sF)))
+                || (sF != 0 && iF && line1.substring(sF).equalsIgnoreCase(line2.substring(sF)));
     }
 }
