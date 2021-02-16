@@ -34,11 +34,14 @@ public class Editor {
     private File outputFile;
     @Parameter(converter = FileConverter.class, validateWith = CheckExist.class)
     private File inputFile;
-    private ArrayList<StringBuffer> list = new ArrayList();
+    public ArrayList<StrIntPair> arr = new ArrayList<>();
 
-    public String getAns() {
-        return String.join("\n", list);
+    public void ans(){
+        for (StrIntPair pair: arr) {
+            System.out.println(pair.getValue() + " " + pair.getStr());
+        }
     }
+
 
     public void editing() throws MinStringException, IOException {
         Scanner in;
@@ -47,65 +50,52 @@ public class Editor {
         } else {
             in = new Scanner(inputFile);
         }
-        int index = 0;
-        String lineToWrite = "";
-        int countOfLine = 1;
-        LinkedHashMap<String, Integer> map = new LinkedHashMap();
+        int curIndex = -1;
         while (in.hasNextLine()) {
             String line = in.nextLine();
             if (line.length() < sF) {
                 throw new MinStringException("String length is less than -s flag");
             }
-            if (!uF) {
-                if (lineToWrite.equals("") || !checkForEq(lineToWrite, line)) {
-                    list.add(new StringBuffer(line));
-                    if (cF && !lineToWrite.equals("")) {
-                        list.set(index, list.get(index).insert(0, countOfLine + " "));
-                        index++;
-                        countOfLine = 1;
-                    }
-                    lineToWrite = line;
-                } else if (cF) {
-                    countOfLine++;
-                }
+            if (curIndex == -1 || !checkForEq(arr.get(curIndex).getStr(), line)) {
+                curIndex += 1;
+                arr.add(new StrIntPair(line, 1));
             } else {
-                boolean checkUniq = true;
-                for (String key : map.keySet()) {
-                    if (checkForEq(key, line)) {
-                        map.put(key, map.get(key) + 1);
-                        checkUniq = false;
-                        break;
-                    }
-                }
-                if (checkUniq) {
-                    map.put(line, map.getOrDefault(line, 1));
-                }
+                arr.set(curIndex, arr.get(curIndex).incValue());
             }
         }
-        if (cF && !uF) {
-            list.set(index, list.get(index).insert(0, countOfLine + " "));
-        }
-        if (uF) {
-            for (String key : map.keySet()) {
-                if (map.get(key) == 1) {
-                    if (cF) {
-                        list.add(new StringBuffer("1 " + key));
-                    } else {
-                        list.add(new StringBuffer(key));
-                    }
-                }
-            }
-        }
-        writeOut(String.join("\n", list));
     }
 
     private void writeOut(String inf) throws IOException {
+
         if (outputFile != null) {
             FileWriter writer = new FileWriter(outputFile);
-            writer.write(inf);
             writer.close();
         } else {
-            System.out.println(inf);
+            if (uF) {
+                for (int i = 0; i < arr.size(); i++) {
+                    boolean uniq = true;
+                    for (int j = 0; j < arr.size(); j++) {
+                        if (i != j
+                                && (arr.get(i).getValue() != 1)
+                                && checkForEq(arr.get(i).getStr(), arr.get(j).getStr())) {
+                            uniq = false;
+                            break;
+                        }
+                    }
+                    System.out.println(arr.get(i).getValue());
+                }
+                System.out.println(inf);
+            } else {
+                for (StrIntPair pair: arr) {
+                    if (cF) {
+                        System.out.println(pair.getValue() + ""  + pair.getStr());
+                    }
+                    else {
+                        System.out.println(pair.getStr());
+                    }
+                    
+                }
+            }
         }
     }
 
