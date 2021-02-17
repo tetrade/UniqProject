@@ -65,7 +65,7 @@ public class Editor {
     private void writeOut() throws IOException {
         if (outputFile == null) {
                 for (StrIntPair pair: arr) {
-                    if (checkUFlag(uF, pair, arr)) {
+                    if (checkUFlag(uF, pair)) {
                         System.out.println(stringCFlag(cF, pair));
                     }
                 }
@@ -73,7 +73,7 @@ public class Editor {
                 FileWriter writer = new FileWriter(outputFile);
                 boolean start = true;
                 for (StrIntPair pair: arr) {
-                    if (checkUFlag(uF, pair, arr)) {
+                    if (checkUFlag(uF, pair)) {
                         if (start) {
                             writer.write(stringCFlag(cF, pair));
                             start = false;
@@ -88,7 +88,7 @@ public class Editor {
         }
 
         //    возвращает true, когда элемент уникальный для всего cписка arr или когда флаг uF отсутствует
-    private boolean checkUFlag(boolean uF, StrIntPair pair, ArrayList<StrIntPair> arr) {
+    private boolean checkUFlag(boolean uF, StrIntPair pair) {
         if (!uF) return true;
         if (pair.getValue() != 1) return false;
         int check = -1;
