@@ -36,14 +36,7 @@ public class Editor {
     private File inputFile;
     public ArrayList<StrIntPair> arr = new ArrayList<>();
 
-    public void ans(){
-        for (StrIntPair pair: arr) {
-            System.out.println(pair.getValue() + " " + pair.getStr());
-        }
-    }
-
-
-    public void editing() throws MinStringException, IOException {
+    public void start() throws MinStringException, IOException {
         Scanner in;
         if (inputFile == null) {
             in = new Scanner(System.in);
@@ -63,39 +56,56 @@ public class Editor {
                 arr.set(curIndex, arr.get(curIndex).incValue());
             }
         }
+        writeOut(arr);
     }
 
-    private void writeOut(String inf) throws IOException {
-
-        if (outputFile != null) {
-            FileWriter writer = new FileWriter(outputFile);
-            writer.close();
-        } else {
-            if (uF) {
-                for (int i = 0; i < arr.size(); i++) {
-                    boolean uniq = true;
-                    for (int j = 0; j < arr.size(); j++) {
-                        if (i != j
-                                && (arr.get(i).getValue() != 1)
-                                && checkForEq(arr.get(i).getStr(), arr.get(j).getStr())) {
-                            uniq = false;
-                            break;
+    private void writeOut(ArrayList<StrIntPair> inf) throws IOException {
+        if (outputFile == null) {
+                for (StrIntPair pair: inf) {
+                    if (checkUFlag(uF, pair, inf)) {
+                        System.out.println(stringCFlag(cF, pair));
+                    }
+                }
+            } else {
+                FileWriter writer = new FileWriter(outputFile);
+                boolean start = true;
+                for (StrIntPair pair: inf) {
+                    if (checkUFlag(uF, pair, inf)) {
+                        if (start) {
+                            writer.write(stringCFlag(cF, pair));
+                            start = false;
+                        }
+                        else {
+                            writer.write("\n"+stringCFlag(cF, pair));
                         }
                     }
-                    System.out.println(arr.get(i).getValue());
+
                 }
-                System.out.println(inf);
-            } else {
-                for (StrIntPair pair: arr) {
-                    if (cF) {
-                        System.out.println(pair.getValue() + ""  + pair.getStr());
-                    }
-                    else {
-                        System.out.println(pair.getStr());
-                    }
-                    
-                }
+                writer.close();
             }
+        }
+
+
+
+//    возвращает true, когда элемент уникальный для всего cписка arr или когда флаг uF отсутствует
+    private boolean checkUFlag(boolean uF, StrIntPair pair, ArrayList<StrIntPair> arr) {
+        if (!uF) return true;
+        if (pair.getValue() != 1) return false;
+        int check = -1;
+        for (StrIntPair cPair: arr) {
+            if (checkForEq(cPair.getStr(), pair.getStr())) {
+                check += 1;
+            }
+        }
+        return check == 0;
+    }
+
+
+    private String stringCFlag(boolean cF, StrIntPair pair){
+        if (cF) {
+            return pair.getValue() + " "  + pair.getStr();
+        } else {
+            return pair.getStr();
         }
     }
 
