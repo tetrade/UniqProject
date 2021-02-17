@@ -34,15 +34,18 @@ public class Editor {
     private File outputFile;
     @Parameter(converter = FileConverter.class, validateWith = CheckExist.class)
     private File inputFile;
-    public ArrayList<StrIntPair> arr = new ArrayList<>();
+    private ArrayList<StrIntPair> arr = new ArrayList<>();
 
     public void start() throws MinStringException, IOException {
-        Scanner in;
         if (inputFile == null) {
-            in = new Scanner(System.in);
+            fillArr(new Scanner(System.in));
         } else {
-            in = new Scanner(inputFile);
+            fillArr(new Scanner(inputFile));
         }
+        writeOut();
+    }
+
+    private void fillArr(Scanner in) throws MinStringException {
         int curIndex = -1;
         while (in.hasNextLine()) {
             String line = in.nextLine();
@@ -56,21 +59,21 @@ public class Editor {
                 arr.set(curIndex, arr.get(curIndex).incValue());
             }
         }
-        writeOut(arr);
     }
 
-    private void writeOut(ArrayList<StrIntPair> inf) throws IOException {
+
+    private void writeOut() throws IOException {
         if (outputFile == null) {
-                for (StrIntPair pair: inf) {
-                    if (checkUFlag(uF, pair, inf)) {
+                for (StrIntPair pair: arr) {
+                    if (checkUFlag(uF, pair, arr)) {
                         System.out.println(stringCFlag(cF, pair));
                     }
                 }
             } else {
                 FileWriter writer = new FileWriter(outputFile);
                 boolean start = true;
-                for (StrIntPair pair: inf) {
-                    if (checkUFlag(uF, pair, inf)) {
+                for (StrIntPair pair: arr) {
+                    if (checkUFlag(uF, pair, arr)) {
                         if (start) {
                             writer.write(stringCFlag(cF, pair));
                             start = false;
@@ -79,15 +82,12 @@ public class Editor {
                             writer.write("\n"+stringCFlag(cF, pair));
                         }
                     }
-
                 }
                 writer.close();
             }
         }
 
-
-
-//    возвращает true, когда элемент уникальный для всего cписка arr или когда флаг uF отсутствует
+        //    возвращает true, когда элемент уникальный для всего cписка arr или когда флаг uF отсутствует
     private boolean checkUFlag(boolean uF, StrIntPair pair, ArrayList<StrIntPair> arr) {
         if (!uF) return true;
         if (pair.getValue() != 1) return false;
@@ -100,8 +100,7 @@ public class Editor {
         return check == 0;
     }
 
-
-    private String stringCFlag(boolean cF, StrIntPair pair){
+    private String stringCFlag(boolean cF, StrIntPair pair) {
         if (cF) {
             return pair.getValue() + " "  + pair.getStr();
         } else {
